@@ -33,15 +33,18 @@ namespace :mackerel do
           info "Task '#{task}' took #{finish_time - start_time} sec."
         end
 
-        client = Mackerel::Client.new(mackerel_api_key: fetch(:mackerel_api_key))
-        client.post_graph_annotation({
-          title: task,
-          description: "Processing time for '#{task}'",
-          from: start_time,
-          to: finish_time,
-          service: fetch(:mackerel_service),
-          roles: fetch(:mackerel_roles)
-        })
+        api_key = fetch(:mackerel_api_key)
+        if api_key
+          client = Mackerel::Client.new(mackerel_api_key: api_key)
+          client.post_graph_annotation({
+            title: task,
+            description: "Processing time for '#{task}'",
+            from: start_time,
+            to: finish_time,
+            service: fetch(:mackerel_service),
+            roles: fetch(:mackerel_roles)
+          })
+        end
       end
     end
   end
