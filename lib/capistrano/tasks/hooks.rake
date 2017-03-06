@@ -25,6 +25,10 @@ namespace :mackerel do
         results = fetch(:mackerel_measurements)
         start_time = results[task]
 
+        run_locally do
+          info "Task '#{task}' took #{finish_time - start_time} sec."
+        end
+
         client = Mackerel::Client.new(mackerel_api_key: fetch(:mackerel_api_key))
         client.post_graph_annotation({
           title: task,
