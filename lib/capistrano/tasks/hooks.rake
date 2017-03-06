@@ -9,7 +9,7 @@ end
 namespace :mackerel do
   desc 'Set hooks'
   task :hooks do
-    tasks = fetch(:mackerel_annotate_tasks)
+    tasks = fetch(:mackerel_annotate_tasks).uniq
     tasks.each do |task|
       task_name = task.tr(':', '_')
 
