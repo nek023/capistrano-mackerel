@@ -11,13 +11,15 @@ namespace :mackerel do
   task :hooks do
     tasks = fetch(:mackerel_annotate_tasks)
     tasks.each do |task|
-      before task, 'mackerel:starting' do
+      task_name = task.tr(':', '_')
+
+      before task, "mackerel:starting_#{task_name}" do
         results = fetch(:mackerel_measurements, {})
         results[task] = Time.now.to_i
         set :mackerel_measurements, results
       end
 
-      after task, 'mackerel:finished' do
+      after task, "mackerel:finished_#{task_name}" do
         finish_time = Time.now.to_i
 
         results = fetch(:mackerel_measurements)
