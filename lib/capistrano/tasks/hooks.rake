@@ -11,6 +11,10 @@ namespace :mackerel do
   task :hooks do
     tasks = fetch(:mackerel_annotate_tasks).uniq
     tasks.each do |task|
+      unless Rake::Task.task_defined?(task)
+        abort "Error: Task '#{task}' is not defined."
+      end
+
       task_name = task.tr(':', '_')
 
       before task, "mackerel:starting_#{task_name}" do
